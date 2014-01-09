@@ -81,6 +81,16 @@
 				}
 			}
 			
+			for(var i=1;i<_snake_position.length;i++)
+			{
+				var tmp = _document.getElementById('game').getElementsByTagName('div')[_snake_position[i]];
+				if(tmp.getAttribute('data-i')==after.getAttribute('data-i'))
+				{
+					self.stop();
+					return false;
+				}
+			}
+			
 			_snake_position.splice(0, 0, p);
 			if(_params['add_tail']==false)
 				_snake_position.pop();
@@ -166,7 +176,9 @@
 		
 		getRandom: function (min, max)
 		{
-			return Math.floor(Math.random() * (max - min + 1)) + min;
+			var result = Math.floor(Math.random() * (max - min)) + min;
+			console.log(result);
+			return result;
 		},		
 
 		// create 
