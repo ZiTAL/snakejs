@@ -1,0 +1,45 @@
+/* http://fonts.googleapis.com/css?family=Press+Start+2P */
+@font-face
+{
+	font-family: 'Press Start 2P';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Press Start 2P'), local('PressStart2P-Regular'), url(arcade.woff) format('woff');
+}
+
+body
+{
+	padding: 10px;
+	font-family: 'Press Start 2P', cursive;
+	overflow: hidden;
+}
+
+#game
+{
+	margin: auto;
+	border: 1px solid #000000;
+	background-color: #b6de9f;
+	overflow: hidden;
+	font-size: 0;
+}
+
+#game > .block
+{
+	margin: 0;
+	display: inline-block;
+}
+
+#game > .snake
+{
+	background-color: #484a45;
+}
+
+#game > #fruit
+{
+	background-color: #ffffff;
+}
+
+#score
+{
+	padding: 5px;
+}

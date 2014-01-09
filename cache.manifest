@@ -1,0 +1,13 @@
+CACHE MANIFEST
+
+css/reset.css
+css/snake.css
+js/hammer.min.js
+js/quo.min.js
+js/array.js
+js/snake.js
+js/snake.gestures.quo.js
+js/snake.gestures.hammer.js
+index.html
+
+FALLBACK
