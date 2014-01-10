@@ -1,11 +1,12 @@
-(function(_window, _document)
+(function()
 {
-	var snake = _window['snake'];
+	'use strict';	
+	var snake = window['snake'];
 	
 	snake.setGestures = function()
 	{
 		var _params = snake.getParams();
-		var _w = _window;
+		var _w = window;
 		
 		Hammer(_w).on('swipeleft', function()
 		{
@@ -62,4 +63,4 @@
 				snake.pause();
 		});			
 	};
-})(window, document);
+})();

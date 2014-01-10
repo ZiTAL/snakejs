@@ -14,6 +14,12 @@ body
 	overflow: hidden;
 }
 
+input, a, img
+{
+	font-family: 'Press Start 2P';
+	margin: 20px;
+}
+
 #game
 {
 	margin: auto;
@@ -42,4 +48,37 @@ body
 #score
 {
 	padding: 5px;
+}
+
+#info
+{
+	margin: auto;
+	border: 1px solid #000000;	
+}
+
+#info.main
+{
+	background-color: #b6de9f;
+}
+
+#info.about
+{
+	background-color: #ffffff;
+}
+
+
+#info > p
+{
+	text-align: center;
+}
+
+#info > p > input
+{
+	margin: 20px;
+	outline: none;
+}
+
+#info > form
+{
+	text-align: center;
 }

@@ -1,9 +1,9 @@
-(function(_window, _document)
+(function()
 {
-	'use strict';	
+	'use strict';
 
 	var _instance;
-	var _container_size = 10;
+	
 	var _params =
 	{
 		'direction': 'right',
@@ -12,48 +12,275 @@
 		'status': 'running',
 		'score': 0
 	};
-	var _snake_position = [0+3, 0+2, 0+1];
+
+	var _snake_position;
+
+	var _snake_size;
+	var _container_size;
+	var _speed;
+
+	var _body;
+	var _game;
+
+	var _self;
 
 	var snake =
 	{
+		setParams: function(public_params)
+		{
+			_self = this;
+			_body = document.getElementsByTagName('body')[0];
+
+			// get params from localstorage
+			var tmp_public_params = JSON.parse(localStorage.getItem('snake_public_params'));
+			if(tmp_public_params!=null)
+				public_params = tmp_public_params;
+
+			console.log(public_params);
+
+			if((parseInt(public_params['snake_size'])>parseInt(public_params['container_size']))
+				|| (parseInt(public_params['container_size'])<10 || parseInt(public_params['container_size'])>30)
+				|| (parseInt(public_params['_speed'])<50 || parseInt(public_params['speed'])>500)
+				|| (public_params['container_size']==null || public_params['snake_size']==null || public_params['speed']==null)
+			)			
+			{
+				_self.config();
+				return false;
+			}
+
+			localStorage.setItem('snake_public_params', JSON.stringify(public_params));
+
+			// set container size
+			_container_size = public_params['container_size'];
+
+			// set speed
+			_speed = public_params['speed'];
+
+			// snake size
+			_snake_size = public_params['snake_size'];
+
+			_snake_position = [];
+
+			// build snake's tail
+			for(var i=0;i<public_params['snake_size'];i++)
+				_snake_position.push(public_params['snake_size']-i);
+
+		},
+		main: function()
+		{
+			_self.createContainer('info');
+			_game.className = 'main';
+
+			var p = document.createElement('p');
+			var input = document.createElement('input');
+			input.value = 'start';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				_self.start();
+			}, false);
+			p.appendChild(input);
+			_game.appendChild(p);
+
+			var p = document.createElement('p');
+			var input = document.createElement('input');
+			input.value = 'config';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				_self.config();
+			}, false);
+			p.appendChild(input);			
+			_game.appendChild(p);			
+
+			var p = document.createElement('p');
+			var input = document.createElement('input');
+			input.value = 'instructions';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				_self.instructions();
+			}, false);
+			p.appendChild(input);
+			_game.appendChild(p);
+
+			var p = document.createElement('p');
+			var input = document.createElement('input');
+			input.value = 'about';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				_self.about();
+			}, false);
+			p.appendChild(input);			
+			_game.appendChild(p);
+		},
+		config: function()
+		{
+			_self.createContainer('info');
+			_game.className = 'main';
+
+			var form = document.createElement('form');
+			form.setAttribute('method', 'post');
+			form.addEventListener('submit', function(e)
+			{
+				e.preventDefault();
+				var inputs = this.getElementsByTagName('input');
+				var public_params = {};
+				for(var i=0;i<inputs.length;i++)
+				{
+					if(inputs[i].getAttribute('type')=='text')
+						public_params[inputs[i].getAttribute('name')] = parseInt(inputs[i].value);
+				}
+				console.log(public_params);
+				if((parseInt(public_params['snake_size'])>parseInt(public_params['container_size']))
+					|| (parseInt(public_params['container_size'])<10 || parseInt(public_params['container_size'])>30)
+					|| (parseInt(public_params['_speed'])<50 || parseInt(public_params['speed'])>500)
+					|| (public_params['container_size']==null || public_params['snake_size']==null || public_params['speed']==null)
+				)
+				{
+					window.alert('Respect the max and minimum params');
+				}
+				else
+				{
+					localStorage.setItem('snake_public_params', JSON.stringify(public_params));
+					_self.setParams();
+					_self.main();
+				}
+			}, false);
+
+			var br = document.createElement('br');
+
+			var p = document.createElement('p');
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('snake size (min 1, max[container_size]: '));
+			var input = document.createElement('input');
+			input.value = _snake_size;
+			input.setAttribute('type', 'text');
+			input.setAttribute('name', 'snake_size');
+			p.appendChild(span);
+			p.appendChild(br);
+			p.appendChild(input);
+			form.appendChild(p);
+
+			var p = document.createElement('p');
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('container size (min 10, max 30): '));
+			var input = document.createElement('input');
+			input.value = _container_size;
+			input.setAttribute('type', 'text');
+			input.setAttribute('name', 'container_size');
+			p.appendChild(span);
+			p.appendChild(br);
+			p.appendChild(input);
+			form.appendChild(p);
+
+			var p = document.createElement('p');
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('speed (min 50, max 500): '));
+			var input = document.createElement('input');
+			input.value = _speed;
+			input.setAttribute('type', 'text');
+			input.setAttribute('name', 'speed');
+			p.appendChild(span);
+			p.appendChild(br);
+			p.appendChild(input);
+			form.appendChild(p);			
+
+			var p = document.createElement('p');
+			var input = document.createElement('input');
+			input.value = 'save';
+			input.setAttribute('type', 'submit');
+			p.appendChild(input);
+			form.appendChild(p);			
+
+			var p = document.createElement('p');
+			var input = document.createElement('input');
+			input.value = 'back';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				snake.main();
+			}, false);
+
+			p.appendChild(input);
+			form.appendChild(p);					
+
+			_game.appendChild(form);
+		},
+		instructions: function()
+		{
+			window.alert('instructions');
+		},
+		about: function()
+		{
+			_self.createContainer('info');
+			_game.className = 'about';
+			var p = document.createElement('p');
+
+			var img = document.createElement('img');
+			img.setAttribute('src', 'https://0.gravatar.com/avatar/82010a08bede7e85ff79cb7d09e271c9?d=https%3A%2F%2Fidenticons.github.com%2Fbc8cf037c789faa958352b85ee3a6f94.png&r=x&s=100');
+
+			p.appendChild(img);
+			_game.appendChild(p);
+
+			var p = document.createElement('p');
+
+			var a = document.createElement('a');
+			a.setAttribute('href', 'https://github.com/ZiTAL/snakejs');
+			a.appendChild(document.createTextNode('https://github.com/ZiTAL/snakejs'));			
+
+			p.appendChild(a);
+			_game.appendChild(p);
+
+			var p = document.createElement('p');
+
+			var input = document.createElement('input');
+			input.value = 'back';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				snake.main();
+			}, false);
+
+			p.appendChild(input);
+			_game.appendChild(p);
+			
+		},
 		start: function()
 		{
-			var self = this;
-			_window.setTimeout(function()
+			// emoty body
+			_self.empty(_game);
+
+			window.setTimeout(function()
 			{
-				self.createGame();
-				self.createScore();
-				self.setEvents();
-				self.createFruit();
-				if(typeof self['setGestures'] == 'function')
-					self.setGestures();
-				self.loop();				
+				_self.createGame();
+				_self.createScore();
+				_self.setEvents();
+				_self.createFruit();
+				if(typeof _self['setGestures'] == 'function')
+					_self.setGestures();
+				_self.loop();				
 			}, 300);
 		},
 		pause: function()
 		{
 			_params['status'] = 'paused';
-			_window.clearTimeout(_instance);
+			window.clearTimeout(_instance);
 		},
 		resume: function()
 		{
-			var self = this;
-
 			_params['status'] = 'running';
-			self.loop();			
+			_self.loop();			
 		},
 		stop: function()
 		{
-			var self = this;
 			_params['status'] = 'stopped';
-			_window.alert('GAME OVER');
 		},
 		
 		move: function(position)
-		{
-			var self = this;
-			
-			var before = _document.getElementById('game').getElementsByTagName('div')[_snake_position[0]];
+		{	
+			var before = _game.getElementsByTagName('div')[_snake_position[0]];
 
 			var p;
 			if(position=='left')
@@ -65,28 +292,28 @@
 			else if(position=='down')
 				p = _snake_position[0] + _container_size;
 			
-			var after = _document.getElementById('game').getElementsByTagName('div')[p];
+			var after = _game.getElementsByTagName('div')[p];
 			
 			if(typeof after=='undefined')
 			{
-				self.stop();
+				_self.stop();
 				return false;
 			}
 			else if(position=='left' || position=='right')
 			{
 				if(before.getAttribute('data-row')!=after.getAttribute('data-row'))
 				{
-					self.stop();
+					_self.stop();
 					return false;
 				}
 			}
 			
 			for(var i=1;i<_snake_position.length;i++)
 			{
-				var tmp = _document.getElementById('game').getElementsByTagName('div')[_snake_position[i]];
+				var tmp = _game.getElementsByTagName('div')[_snake_position[i]];
 				if(tmp.getAttribute('data-i')==after.getAttribute('data-i'))
 				{
-					self.stop();
+					_self.stop();
 					return false;
 				}
 			}
@@ -102,26 +329,25 @@
 			if(_params['status']=='stopped')
 				return false;
 
-			var self = this;
 			_params['locked'] = false;
-			self.paint();
-			_instance = _window.setTimeout(function()
+			_self.paint();
+			_instance = window.setTimeout(function()
 			{
-				self.move(_params['direction']);
-				var fruit_i = _document.getElementById('fruit').getAttribute('data-i');
+				_self.move(_params['direction']);
+				var fruit_i = document.getElementById('fruit').getAttribute('data-i');
 				if(_snake_position[0]==fruit_i)
 				{
-					self.createFruit();
-					self.addScore(10);
+					_self.createFruit();
+					_self.addScore(10);
 					_params['add_tail'] = true;
 				}
-				self.loop();
-			}, 200);
+				_self.loop();
+			}, _speed);
 		},
 		
 		paint: function()
 		{
-			var b = _document.getElementById('game').getElementsByTagName('div');
+			var b = _game.getElementsByTagName('div');
 			var l = b.length;
 			for(var j=0;j<l;j++)
 			{
@@ -135,15 +361,14 @@
 		
 		createFruit: function()
 		{
-			var self = this;
-			self.deleteFruit();
+			_self.deleteFruit();
 			var min = 0;
 			var max = _container_size * _container_size;
-			var blocks = _document.getElementsByClassName('block');
+			var blocks = document.getElementsByClassName('block');
 			var l = blocks.length;
 			do
 			{
-				var p = self.getRandom(min, max);
+				var p = _self.getRandom(min, max);
 				if(blocks[p].className=='block snake')
 					p = undefined;
 			}
@@ -161,7 +386,7 @@
 		
 		deleteFruit: function()
 		{
-			var f = _document.getElementById('fruit');
+			var f = document.getElementById('fruit');
 			if(f!=null)
 				f.removeAttribute('id');
 		},
@@ -169,33 +394,32 @@
 		addScore: function(num)
 		{
 			_params['score'] += num;
-			var count = _document.getElementById('count');
+			var count = document.getElementById('count');
 			count.removeChild(count.firstChild);
-			count.appendChild(_document.createTextNode(_params['score']));
+			count.appendChild(document.createTextNode(_params['score']));
 		},
 		
 		getRandom: function (min, max)
 		{
-			var result = Math.floor(Math.random() * (max - min)) + min;
-			console.log(result);
-			return result;
+			return Math.floor(Math.random() * (max - min)) + min;
 		},		
 
 		// create 
 		createGame: function()
 		{
-			var self = this;
-			self.createContainer();
-			self.createBlocks();				
+			_self.createContainer('game');
+			_self.createBlocks();				
 		},
 		
-		createContainer: function()
+		createContainer: function(type)
 		{
-			var self = this;
+			_body = document.getElementsByTagName('body')[0];
+			_self.empty(_body);
+
 			var size;
 			
 			// get window size
-			var window_size = self.getWindowSize();
+			var window_size = _self.getWindowSize();
 
 			if(window_size['width']>window_size['height'])
 				size = window_size['height'];
@@ -205,22 +429,25 @@
 			size = size - 2 - 40;
 
 			// _container_size multiple
-			while(size%_container_size!=0)
-				size--;
-			
+			if(_container_size!=null)
+			{
+				while(size%_container_size!=0)
+					size--;
+			}
+
 			// create div
-			var div = _document.createElement('div');
-			div.setAttribute('id', 'game');
-			div.style.width = size+"px";
-			div.style.height = size+"px";
+			_game = document.createElement('div');
+			_game.setAttribute('id', type);
+			_game.style.width = size+"px";
+			_game.style.height = size+"px";
 			
 			// add to body
-			_document.getElementsByTagName('body')[0].appendChild(div);			
+			_body.appendChild(_game);			
 		},
 		
 		createBlocks: function()
 		{			
-			var container = _document.getElementById('game');
+			var container = document.getElementById('game');
 			// remove border
 			var size = container.offsetWidth - 2;
 			size = size / _container_size;
@@ -230,7 +457,7 @@
 			var size2 = _container_size*_container_size;
 			for(var i=0; i<size2; i++)
 			{		
-				var div = _document.createElement('div');
+				var div = document.createElement('div');
 				div.className = 'block';
 				div.style.width = size+"px";
 				div.style.height = size+"px";
@@ -251,8 +478,8 @@
 		
 		getWindowSize: function()
 		{
-			var w = _window,
-				d = _document,
+			var w = window,
+				d = document,
 				e = d.documentElement,
 				g = d.getElementsByTagName('body')[0],
 				x = w.innerWidth || e.clientWidth || g.clientWidth,
@@ -270,25 +497,29 @@
 			var div = document.createElement('div');
 			div.setAttribute('id', 'score');
 			var span = document.createElement('span');
-			span.appendChild(_document.createTextNode('score: '));
+			span.appendChild(document.createTextNode('score: '));
 			div.appendChild(span);
 			var span = document.createElement('span');
 			span.setAttribute('id', 'count'); 
-			span.appendChild(_document.createTextNode('0'));
+			span.appendChild(document.createTextNode('0'));
 			div.appendChild(span);			
-			_document.getElementsByTagName('body')[0].appendChild(div);
+			document.getElementsByTagName('body')[0].appendChild(div);
 		},
 		
 		getParams: function()
 		{
 			return _params;
 		},
+
+		empty: function(item)
+		{
+			while(item.hasChildNodes())
+				item.removeChild(item.firstChild);
+		},
 		
 		setEvents: function()
 		{
-			var self = this;
-
-			_window.addEventListener('keydown', function(e)
+			window.addEventListener('keydown', function(e)
 			{	
 				if(_params['locked']==false)
 				{
@@ -320,9 +551,9 @@
 						return false;
 
 					if(_params['status']=='paused')
-						self.resume();
+						_self.resume();
 					else
-						self.pause();
+						_self.pause();
 				}
 
 				_params['locked'] = true;
@@ -331,5 +562,5 @@
 		}
 	};
 
-	_window['snake'] = snake;
-})(window, document);
+	window['snake'] = snake;
+})();
