@@ -141,7 +141,7 @@
 				{
 					localStorage.setItem('snake_public_params', JSON.stringify(public_params));
 					_self.setParams();
-					_self.main();
+					window.location.href = window.location.href;
 				}
 			}, false);
 
