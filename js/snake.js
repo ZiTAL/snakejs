@@ -36,18 +36,6 @@
 			if(tmp_public_params!=null)
 				public_params = tmp_public_params;
 
-			console.log(public_params);
-
-			if((parseInt(public_params['snake_size'])>parseInt(public_params['container_size']))
-				|| (parseInt(public_params['container_size'])<10 || parseInt(public_params['container_size'])>30)
-				|| (parseInt(public_params['_speed'])<50 || parseInt(public_params['speed'])>500)
-				|| (public_params['container_size']==null || public_params['snake_size']==null || public_params['speed']==null)
-			)			
-			{
-				_self.config();
-				return false;
-			}
-
 			localStorage.setItem('snake_public_params', JSON.stringify(public_params));
 
 			// set container size
@@ -72,6 +60,10 @@
 			_game.className = 'main';
 
 			var p = document.createElement('p');
+			
+			var img = document.createElement('img');
+			img.setAttribute('src', 'img/snake.png');
+			
 			var input = document.createElement('input');
 			input.value = 'start';
 			input.setAttribute('type', 'button');
@@ -79,6 +71,9 @@
 			{
 				_self.start();
 			}, false);
+			p.appendChild(img);
+			var br = document.createElement('br');
+			p.appendChild(br);
 			p.appendChild(input);
 			_game.appendChild(p);
 
@@ -133,13 +128,14 @@
 						public_params[inputs[i].getAttribute('name')] = parseInt(inputs[i].value);
 				}
 				console.log(public_params);
-				if((parseInt(public_params['snake_size'])>parseInt(public_params['container_size']))
+				if((parseInt(public_params['snake_size'])>=parseInt(public_params['container_size']))
+				   	|| (public_params['snake_size']<1)
 					|| (parseInt(public_params['container_size'])<10 || parseInt(public_params['container_size'])>30)
 					|| (parseInt(public_params['_speed'])<50 || parseInt(public_params['speed'])>500)
 					|| (public_params['container_size']==null || public_params['snake_size']==null || public_params['speed']==null)
 				)
 				{
-					window.alert('Respect the max and minimum params');
+					window.alert('Respect the max and minimum params madafaka!');
 				}
 				else
 				{
@@ -149,7 +145,7 @@
 				}
 			}, false);
 
-			var br = document.createElement('br');
+			
 
 			var p = document.createElement('p');
 			var span = document.createElement('span');
@@ -158,49 +154,58 @@
 			input.value = _snake_size;
 			input.setAttribute('type', 'text');
 			input.setAttribute('name', 'snake_size');
+			input.setAttribute('size', '2');
+			input.setAttribute('maxlength', '2');			
 			p.appendChild(span);
+			var br = document.createElement('br');
 			p.appendChild(br);
 			p.appendChild(input);
-			form.appendChild(p);
+			var br = document.createElement('br');
+			p.appendChild(br);			
 
-			var p = document.createElement('p');
 			var span = document.createElement('span');
 			span.appendChild(document.createTextNode('container size (min 10, max 30): '));
 			var input = document.createElement('input');
 			input.value = _container_size;
 			input.setAttribute('type', 'text');
 			input.setAttribute('name', 'container_size');
+			input.setAttribute('size', '2');	
+			input.setAttribute('maxlength', '2');
 			p.appendChild(span);
-			p.appendChild(br);
+			var br = document.createElement('br');
+			p.appendChild(br);			
 			p.appendChild(input);
-			form.appendChild(p);
+			var br = document.createElement('br');
+			p.appendChild(br);
 
-			var p = document.createElement('p');
 			var span = document.createElement('span');
 			span.appendChild(document.createTextNode('speed (min 50, max 500): '));
 			var input = document.createElement('input');
 			input.value = _speed;
 			input.setAttribute('type', 'text');
 			input.setAttribute('name', 'speed');
+			input.setAttribute('size', '3');			
+			input.setAttribute('maxlength', '3');
 			p.appendChild(span);
+			var br = document.createElement('br');
 			p.appendChild(br);
 			p.appendChild(input);
-			form.appendChild(p);			
+			var br = document.createElement('br');
+			p.appendChild(br);			
 
-			var p = document.createElement('p');
 			var input = document.createElement('input');
 			input.value = 'save';
 			input.setAttribute('type', 'submit');
 			p.appendChild(input);
-			form.appendChild(p);			
+			var br = document.createElement('br');
+			p.appendChild(br);			
 
-			var p = document.createElement('p');
 			var input = document.createElement('input');
 			input.value = 'back';
 			input.setAttribute('type', 'button');
 			input.addEventListener('click', function()
 			{
-				snake.main();
+				window.location.href = window.location.href;
 			}, false);
 
 			p.appendChild(input);
@@ -210,7 +215,60 @@
 		},
 		instructions: function()
 		{
-			window.alert('instructions');
+			_self.createContainer('info');
+			_game.className = 'main';
+			
+			var p = document.createElement('p');
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('Mobile controls:'));
+			var br = document.createElement('br');
+			p.appendChild(span);
+			p.appendChild(br);
+			var br = document.createElement('br');
+			p.appendChild(br);
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('Pause/Resume: Double tap'));			
+			p.appendChild(span);
+			var br = document.createElement('br');
+			p.appendChild(br);
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('Move: Swipe up,down,left,right'));			
+			p.appendChild(span);		
+			
+			var br = document.createElement('br');
+			p.appendChild(br);
+			var br = document.createElement('br');
+			p.appendChild(br);
+			var br = document.createElement('br');
+			p.appendChild(br);
+
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('Desktop controls:'));
+			var br = document.createElement('br');
+			p.appendChild(span);
+			p.appendChild(br);
+			var br = document.createElement('br');
+			p.appendChild(br);
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('Pause/Resume: Space'));			
+			p.appendChild(span);
+			var br = document.createElement('br');
+			p.appendChild(br);
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('Move: Arrow up,down,left,right'));			
+			p.appendChild(span);		
+			var br = document.createElement('br');
+			p.appendChild(br);			
+
+			var input = document.createElement('input');
+			input.value = 'back';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				window.location.href = window.location.href;
+			}, false);
+			p.appendChild(input);
+			_game.appendChild(p);
 		},
 		about: function()
 		{
@@ -219,7 +277,7 @@
 			var p = document.createElement('p');
 
 			var img = document.createElement('img');
-			img.setAttribute('src', 'https://0.gravatar.com/avatar/82010a08bede7e85ff79cb7d09e271c9?d=https%3A%2F%2Fidenticons.github.com%2Fbc8cf037c789faa958352b85ee3a6f94.png&r=x&s=100');
+			img.setAttribute('src', 'img/avatar.png');
 
 			p.appendChild(img);
 			_game.appendChild(p);
@@ -229,6 +287,11 @@
 			var a = document.createElement('a');
 			a.setAttribute('href', 'https://github.com/ZiTAL/snakejs');
 			a.appendChild(document.createTextNode('https://github.com/ZiTAL/snakejs'));			
+			a.addEventListener('click', function(e)
+			{
+				e.preventDefault();
+				window.open(this.href);
+			}, false);			
 
 			p.appendChild(a);
 			_game.appendChild(p);
@@ -240,7 +303,7 @@
 			input.setAttribute('type', 'button');
 			input.addEventListener('click', function()
 			{
-				snake.main();
+				window.location.href = window.location.href;
 			}, false);
 
 			p.appendChild(input);
@@ -249,8 +312,10 @@
 		},
 		start: function()
 		{
-			// emoty body
+			// empty body
 			_self.empty(_game);
+			_params['status'] = 'running';
+			_params['score'] = 0;
 
 			window.setTimeout(function()
 			{
@@ -275,7 +340,56 @@
 		},
 		stop: function()
 		{
+			window.clearTimeout(_instance);
 			_params['status'] = 'stopped';
+
+			_self.createContainer('info');
+			_game.className = 'main';
+			
+			var max_score = localStorage.getItem('snake_max_score');
+			if(max_score==null)
+				max_score = 0;
+			if(parseInt(max_score)<parseInt(_params['score']))
+				localStorage.setItem('snake_max_score', parseInt(_params['score']));
+			
+			var p = document.createElement('p');
+			p.appendChild(document.createTextNode('GAME OVER'));
+			
+			var br = document.createElement('br');
+			p.appendChild(br);			
+			var br = document.createElement('br');
+			p.appendChild(br);			
+			
+			p.appendChild(document.createTextNode('Actual score: '+_params['score']));
+			var br = document.createElement('br');
+			p.appendChild(br);
+			
+			p.appendChild(document.createTextNode('Max score: '+max_score));
+			var br = document.createElement('br');
+			p.appendChild(br);			
+			
+			var input = document.createElement('input');
+			input.value = 'reset';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				localStorage.setItem('snake_max_score', parseInt('0'));
+				_self.stop();
+			}, false);			
+			p.appendChild(input);			
+			var br = document.createElement('br');
+			p.appendChild(br);			
+			
+			var input = document.createElement('input');
+			input.value = 'back';
+			input.setAttribute('type', 'button');
+			input.addEventListener('click', function()
+			{
+				window.location.href = window.location.href;
+			}, false);
+
+			p.appendChild(input);			
+			_game.appendChild(p);
 		},
 		
 		move: function(position)
@@ -326,6 +440,7 @@
 		
 		loop: function()
 		{
+			console.log(_params['status']);
 			if(_params['status']=='stopped')
 				return false;
 
@@ -334,14 +449,18 @@
 			_instance = window.setTimeout(function()
 			{
 				_self.move(_params['direction']);
-				var fruit_i = document.getElementById('fruit').getAttribute('data-i');
-				if(_snake_position[0]==fruit_i)
+				var fruit = document.getElementById('fruit');
+				if(fruit!=null)
 				{
-					_self.createFruit();
-					_self.addScore(10);
-					_params['add_tail'] = true;
+					var fruit_i = fruit.getAttribute('data-i');
+					if(_snake_position[0]==fruit_i)
+					{
+						_self.createFruit();
+						_self.addScore(10);
+						_params['add_tail'] = true;
+					}
+					_self.loop();					
 				}
-				_self.loop();
 			}, _speed);
 		},
 		

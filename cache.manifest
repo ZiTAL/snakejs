@@ -2,6 +2,9 @@ CACHE MANIFEST
 
 css/reset.css
 css/snake.css
+css/arcade.woff
+img/avatar.png
+img/snake.png
 js/hammer.min.js
 js/quo.min.js
 js/array.js

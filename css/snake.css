@@ -9,7 +9,7 @@
 
 body
 {
-	padding: 10px;
+	padding: 1em;
 	font-family: 'Press Start 2P', cursive;
 	overflow: hidden;
 }
@@ -17,7 +17,10 @@ body
 input, a, img
 {
 	font-family: 'Press Start 2P';
-	margin: 20px;
+	font-size: 10px;
+	outline: none;
+	padding: 5px;
+	margin: 5px;
 }
 
 #game
@@ -48,12 +51,14 @@ input, a, img
 #score
 {
 	padding: 5px;
+	text-align:center;
 }
 
 #info
 {
 	margin: auto;
 	border: 1px solid #000000;	
+	font-size: 10px;
 }
 
 #info.main
@@ -66,16 +71,10 @@ input, a, img
 	background-color: #ffffff;
 }
 
-
 #info > p
 {
 	text-align: center;
-}
-
-#info > p > input
-{
-	margin: 20px;
-	outline: none;
+	padding: 5px;
 }
 
 #info > form
