@@ -1,1 +1,2 @@
 AddType application/x-web-app-manifest+json .webapp
+AddHandler x-web-app-manifest+json .webapp
