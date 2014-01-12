@@ -1,0 +1,10 @@
+{
+  "name": "Snake",
+  "description": "Snake game in html/js, for web and Firefox OS",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "ZiTAL",
+    "url": "https://github.com/ZiTAL/snakejs"
+  },
+"installs_allowed_from": ["*"]
+}

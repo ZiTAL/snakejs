@@ -1,4 +1,8 @@
 snakejs
 =======
 
-Snake game in js, for web and Firefox OS
+Snake game in html/js, for web and Firefox OS
+
+license
+=======
+AGPL
