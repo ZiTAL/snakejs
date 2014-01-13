@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="snake.manifest">
+<html manifest="/manifest/snake.manifest">
 <head>
     <meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
@@ -17,6 +17,11 @@
 	{
 		var manifestLocation = window.location.href+"manifest.webapp";
 		var installRequest = navigator.mozApps.install(manifestLocation);
+
+		installRequest.onsuccess = function(data)
+		{
+			// App installed successfully!
+		};		
 
 		snake.setParams(
 		{

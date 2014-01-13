@@ -1,10 +1,15 @@
 {
-  "name": "Snake",
-  "description": "Snake game written in html\/js",
-  "launch_path": "/index.html",
-  "developer": {
-    "name": "ZiTAL",
-    "url": "https://github.com/ZiTAL/snakejs"
-  },
-"installs_allowed_from": ["*"]
+	"name":	"Snake",
+	"description":	"Snake in html and js",
+	"launch_path":	"/index.html",
+	"developer":
+	{
+		"name":	"ZiTAL",
+		"url":	"https://github.com/ZiTAL/snakejs"
+	},
+	"icons":
+	{
+		"128":	"/img/snake-128.png"
+	},  
+	"installs_allowed_from":	["*"]
 }

@@ -10,51 +10,43 @@
 		
 		_w.on('swipeLeft', function()
 		{
-			if(_params['status']=='stopped' || _params['status']=='paused' || _params['locked']==true)
+			if(_params['status']=='stopped' || _params['status']=='paused')
 				return false;
 	
 			if(_params['direction']!='right')
 					_params['direction'] = 'left';
-	
-			_params['locked'] = true;
 		});
 		
 		_w.on('swipeRight', function()
 		{
-			if(_params['status']=='stopped' || _params['status']=='paused' || _params['locked']==true)
+			if(_params['status']=='stopped' || _params['status']=='paused')
 				return false;
 	
 			if(_params['direction']!='left')
 					_params['direction'] = 'right';
-	
-			_params['locked'] = true;
 		});
 		
 		_w.on('swipeUp', function()
 		{
-			if(_params['status']=='stopped' || _params['status']=='paused' || _params['locked']==true)
+			if(_params['status']=='stopped' || _params['status']=='paused')
 				return false;
 	
 			if(_params['direction']!='down')
 					_params['direction'] = 'up';
-	
-			_params['locked'] = true;
 		});
 		
 		_w.on('swipeDown', function()
 		{
-			if(_params['status']=='stopped' || _params['status']=='paused' || _params['locked']==true)
+			if(_params['status']=='stopped' || _params['status']=='paused')
 				return false;
 	
 			if(_params['direction']!='up')
 					_params['direction'] = 'down';
-	
-			_params['locked'] = true;
 		});	
 		
 		_w.on('doubleTap', function()
 		{
-			if(_params['status']=='stopped' || _params['locked']==true)
+			if(_params['status']=='stopped')
 				return false;				
 	
 			if(_params['status']=='paused')
