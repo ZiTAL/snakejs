@@ -2,59 +2,18 @@
 {
 	'use strict';	
 	var snake = window['snake'];
+	var _params = snake.getParams();
 	
 	snake.setGestures = function()
 	{
-		var _params = snake.getParams();
-		var _w = window;
+		snake.setSwipe('swipeleft', 'left', 'right');
+		snake.setSwipe('swiperight', 'right', 'left');
+		snake.setSwipe('swipeup', 'up', 'down');
+		snake.setSwipe('swipedown', 'down', 'up');
 		
-		Hammer(_w).on('swipeleft', function()
+		Hammer(window).on('doubletap', function()
 		{
-			if(_params['status']=='stopped' || _params['status']=='paused' || _params['locked']==true)
-				return false;
-	
-			if(_params['direction']!='right')
-					_params['direction'] = 'left';
-	
-			_params['locked'] = true;
-		});
-		
-		Hammer(_w).on('swiperight', function()
-		{
-			if(_params['status']=='stopped' || _params['status']=='paused' || _params['locked']==true)
-				return false;
-	
-			if(_params['direction']!='left')
-					_params['direction'] = 'right';
-	
-			_params['locked'] = true;
-		});
-		
-		Hammer(_w).on('swipeup', function()
-		{
-			if(_params['status']=='stopped' || _params['status']=='paused' || _params['locked']==true)
-				return false;
-	
-			if(_params['direction']!='down')
-					_params['direction'] = 'up';
-	
-			_params['locked'] = true;
-		});
-		
-		Hammer(_w).on('swipedown', function()
-		{
-			if(_params['status']=='stopped' || _params['status']=='paused' || _params['locked']==true)
-				return false;
-	
-			if(_params['direction']!='up')
-					_params['direction'] = 'down';
-	
-			_params['locked'] = true;
-		});	
-		
-		Hammer(_w).on('doubletap', function()
-		{
-			if(_params['status']=='stopped' || _params['locked']==true)
+			if(_params['status']=='stopped')
 				return false;				
 	
 			if(_params['status']=='paused')
@@ -62,5 +21,20 @@
 			else
 				snake.pause();
 		});			
+	};
+
+	snake.setSwipe = function(swipe, direction, not_direction)
+	{
+		Hammer(window).on(swipe,
+		{
+			swipe_velocity: _params['swipe_velocity']
+		}, function()
+		{
+			if(_params['status']=='stopped' || _params['status']=='paused')
+				return false;
+	
+			if(_params['direction']!=direction)
+					_params['direction'] = not_direction;
+		});
 	};
 })();

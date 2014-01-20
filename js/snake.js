@@ -18,6 +18,7 @@
 	var _snake_size;
 	var _container_size;
 	var _speed;
+	var _swipe_velocity;
 
 	var _body;
 	var _game;
@@ -46,6 +47,10 @@
 
 			// snake size
 			_snake_size = public_params['snake_size'];
+
+			// swipe velocity
+			_swipe_velocity = public_params['swipe_velocity'];			
+			console.log(_swipe_velocity);
 
 			_snake_position = [];
 
@@ -125,14 +130,20 @@
 				for(var i=0;i<inputs.length;i++)
 				{
 					if(inputs[i].getAttribute('type')=='text')
-						public_params[inputs[i].getAttribute('name')] = parseInt(inputs[i].value);
+					{
+						if(inputs[i].getAttribute('name')=='swipe_velocity')
+							public_params[inputs[i].getAttribute('name')] = parseFloat(inputs[i].value);
+						else
+							public_params[inputs[i].getAttribute('name')] = parseInt(inputs[i].value);
+					}
 				}
-				console.log(public_params);
+
 				if((parseInt(public_params['snake_size'])>=parseInt(public_params['container_size']))
 				   	|| (public_params['snake_size']<1)
 					|| (parseInt(public_params['container_size'])<10 || parseInt(public_params['container_size'])>30)
 					|| (parseInt(public_params['_speed'])<50 || parseInt(public_params['speed'])>500)
 					|| (public_params['container_size']==null || public_params['snake_size']==null || public_params['speed']==null)
+					|| (parseFloat(public_params['swipe_velocity'])<0.1 || parseFloat(public_params['swipe_velocity'])>2)
 				)
 				{
 					window.alert('Respect the max and minimum params madafaka!');
@@ -186,6 +197,21 @@
 			input.setAttribute('name', 'speed');
 			input.setAttribute('size', '3');			
 			input.setAttribute('maxlength', '3');
+			p.appendChild(span);
+			var br = document.createElement('br');
+			p.appendChild(br);
+			p.appendChild(input);
+			var br = document.createElement('br');
+			p.appendChild(br);			
+
+			var span = document.createElement('span');
+			span.appendChild(document.createTextNode('swipe speed (default: 0.7, min: 0.1, max: 2.0): '));
+			var input = document.createElement('input');
+			input.value = _swipe_velocity;
+			input.setAttribute('type', 'text');
+			input.setAttribute('name', 'swipe_velocity');
+			input.setAttribute('size', '4');			
+			input.setAttribute('maxlength', '4');
 			p.appendChild(span);
 			var br = document.createElement('br');
 			p.appendChild(br);
@@ -440,7 +466,6 @@
 		
 		loop: function()
 		{
-			console.log(_params['status']);
 			if(_params['status']=='stopped')
 				return false;
 
