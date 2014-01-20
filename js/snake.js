@@ -10,7 +10,7 @@
 		'locked': false,
 		'add_tail': false,
 		'status': 'running',
-		'swipe_velocity': 0.7,
+		'swipe_velocity': 0.5,
 		'score': 0
 	};
 
@@ -205,7 +205,7 @@
 			p.appendChild(br);			
 
 			var span = document.createElement('span');
-			span.appendChild(document.createTextNode('swipe speed (default: 0.7, min: 0.1, max: 2.0): '));
+			span.appendChild(document.createTextNode('swipe speed (default: 0.5, min: 0.1, max: 2.0): '));
 			var input = document.createElement('input');
 			input.value = _params['swipe_velocity'];
 			input.setAttribute('type', 'text');
