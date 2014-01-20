@@ -10,6 +10,7 @@
 		'locked': false,
 		'add_tail': false,
 		'status': 'running',
+		'swipe_velocity': 0.7,
 		'score': 0
 	};
 
@@ -18,7 +19,6 @@
 	var _snake_size;
 	var _container_size;
 	var _speed;
-	var _swipe_velocity;
 
 	var _body;
 	var _game;
@@ -49,7 +49,8 @@
 			_snake_size = public_params['snake_size'];
 
 			// swipe velocity
-			_swipe_velocity = public_params['swipe_velocity'];
+			if(typeof public_params['swipe_velocity'] != 'undefined')
+				_params['swipe_velocity'] = public_params['swipe_velocity'];
 
 			_snake_position = [];
 
@@ -57,6 +58,8 @@
 			for(var i=0;i<public_params['snake_size'];i++)
 				_snake_position.push(public_params['snake_size']-i);
 
+			if(typeof _self['setGestures'] == 'function')
+				_self.setGestures();
 		},
 		main: function()
 		{
@@ -112,7 +115,7 @@
 				_self.about();
 			}, false);
 			p.appendChild(input);			
-			_game.appendChild(p);
+			_game.appendChild(p);			
 		},
 		config: function()
 		{
@@ -154,8 +157,6 @@
 					window.location.href = window.location.href;
 				}
 			}, false);
-
-			
 
 			var p = document.createElement('p');
 			var span = document.createElement('span');
@@ -206,7 +207,7 @@
 			var span = document.createElement('span');
 			span.appendChild(document.createTextNode('swipe speed (default: 0.7, min: 0.1, max: 2.0): '));
 			var input = document.createElement('input');
-			input.value = _swipe_velocity;
+			input.value = _params['swipe_velocity'];
 			input.setAttribute('type', 'text');
 			input.setAttribute('name', 'swipe_velocity');
 			input.setAttribute('size', '4');			
@@ -348,10 +349,8 @@
 				_self.createScore();
 				_self.setEvents();
 				_self.createFruit();
-				if(typeof _self['setGestures'] == 'function')
-					_self.setGestures();
 				_self.loop();				
-			}, 300);
+			}, 100);
 		},
 		pause: function()
 		{

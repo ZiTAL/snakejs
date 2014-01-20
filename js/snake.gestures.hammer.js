@@ -2,16 +2,25 @@
 {
 	'use strict';	
 	var snake = window['snake'];
-	var _params = snake.getParams();
+	var _params;
 	
 	snake.setGestures = function()
 	{
-		snake.setSwipe('swipeleft', 'left', 'right');
-		snake.setSwipe('swiperight', 'right', 'left');
-		snake.setSwipe('swipeup', 'up', 'down');
-		snake.setSwipe('swipedown', 'down', 'up');
+		_params = snake.getParams();
+
+		console.log(_params['swipe_velocity']);
+
+		var hammertime = Hammer(window,
+		{
+			swipe_velocity: _params['swipe_velocity']
+		});
+
+		snake.setSwipe(hammertime, 'swipeleft', 'left');
+		snake.setSwipe(hammertime, 'swiperight', 'right');
+		snake.setSwipe(hammertime, 'swipeup', 'up');
+		snake.setSwipe(hammertime, 'swipedown', 'down');
 		
-		Hammer(window).on('doubletap', function()
+		hammertime.on('doubletap', function()
 		{
 			if(_params['status']=='stopped')
 				return false;				
@@ -23,18 +32,14 @@
 		});			
 	};
 
-	snake.setSwipe = function(swipe, direction, not_direction)
+	snake.setSwipe = function(obj, swipe, direction)
 	{
-		Hammer(window).on(swipe,
-		{
-			swipe_velocity: _params['swipe_velocity']
-		}, function()
+		obj.on(swipe, function()
 		{
 			if(_params['status']=='stopped' || _params['status']=='paused')
 				return false;
-	
-			if(_params['direction']!=not_direction)
-					_params['direction'] = direction;
+
+			_params['direction'] = direction;
 		});
 	};
 })();

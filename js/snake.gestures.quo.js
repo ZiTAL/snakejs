@@ -6,10 +6,10 @@
 	
 	snake.setGestures = function()
 	{
-		snake.setSwipe('swipeLeft', 'left', 'right');
-		snake.setSwipe('swipeRight', 'right', 'left');
-		snake.setSwipe('swipeUp', 'up', 'down');
-		snake.setSwipe('swipeDown', 'down', 'up');		
+		snake.setSwipe('swipeLeft', 'left');
+		snake.setSwipe('swipeRight', 'right');
+		snake.setSwipe('swipeUp', 'up');
+		snake.setSwipe('swipeDown', 'down');		
 		
 		$$(window).on('doubleTap', function()
 		{
@@ -29,9 +29,8 @@
 		{
 			if(_params['status']=='stopped' || _params['status']=='paused')
 				return false;
-	
-			if(_params['direction']!=not_direction)
-					_params['direction'] = direction;
+
+			_params['direction'] = direction;
 		});
 	};
 })();
