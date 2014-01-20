@@ -49,8 +49,7 @@
 			_snake_size = public_params['snake_size'];
 
 			// swipe velocity
-			_swipe_velocity = public_params['swipe_velocity'];			
-			console.log(_swipe_velocity);
+			_swipe_velocity = public_params['swipe_velocity'];
 
 			_snake_position = [];
 
