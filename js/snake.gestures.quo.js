@@ -30,8 +30,8 @@
 			if(_params['status']=='stopped' || _params['status']=='paused')
 				return false;
 	
-			if(_params['direction']!=direction)
-					_params['direction'] = not_direction;
+			if(_params['direction']!=not_direction)
+					_params['direction'] = direction;
 		});
 	};
 })();
